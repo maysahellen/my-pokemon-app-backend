@@ -1,10 +1,10 @@
-package infraestructure.domain;
+package domain;
 
 import jakarta.json.bind.annotation.JsonbProperty;
 
 public class PokemonResponse {
 
-    @JsonbProperty("name")
+    @JsonbProperty("name") // faz a correspondencia entre o campo do json e o atributo
     private String name;
     @JsonbProperty("url")
     private String url;

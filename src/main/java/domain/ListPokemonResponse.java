@@ -1,4 +1,4 @@
-package infraestructure.domain;
+package domain;
 
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ListPokemonResponse {
 
-    @JsonbProperty("results")
+    @JsonbProperty("results") // serve pra saber que o results daqui é o mesmo do results da api
     private List<PokemonResponse> results;
 
     public ListPokemonResponse(List<PokemonResponse> results) {
