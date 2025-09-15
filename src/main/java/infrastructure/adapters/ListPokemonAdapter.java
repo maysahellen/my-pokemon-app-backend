@@ -1,24 +1,23 @@
 package infrastructure.adapters;
 
 import domain.ListPokemonResponse;
-import infrastructure.adapters.exception.GetListPokemonException;
-import infrastructure.gateways.Gateway;
+import infrastructure.exception.GetListPokemonException;
+import infrastructure.gateways.PokemonGateway;
 import infrastructure.gateways.ListPokemonGateway;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.jboss.logmanager.Logger;
 
 import static io.quarkus.arc.impl.UncaughtExceptions.LOGGER;
 
-public class ListPokemon implements ListPokemonGateway {
+public class ListPokemonAdapter implements ListPokemonGateway {
 
     // guarda um objeto gateway
-    private final Gateway gateway;
+    private final PokemonGateway pokemonGateway;
 
     // instancia a interface gateway e coloca no atributo
     @Inject
-    public ListPokemon(@RestClient Gateway gateway) {
-        this.gateway = gateway;
+    public ListPokemonAdapter(@RestClient PokemonGateway pokemonGateway) {
+        this.pokemonGateway = pokemonGateway;
     }
 
     // implementando o metodo da interface
@@ -27,7 +26,8 @@ public class ListPokemon implements ListPokemonGateway {
 
         try{
             LOGGER.info("[ListPokemonAdapter:getListPokemon] Getting pokemon data from the api");
-            return gateway.getListPokemon(limit, offset);
+            ListPokemonResponse response = pokemonGateway.getListPokemon(limit, offset);
+            return response;
         }
         catch(Exception e){
             LOGGER.error("[ListPokemonAdapter:getListPokemon] Error getting pokemon data");
