@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Given ListPokemon")
 public class ListPokemonAdapterTest {
 
@@ -64,7 +63,7 @@ public class ListPokemonAdapterTest {
                 // Mock do Gateway
                 when(pokemonGatewayMock.getListPokemon(limit, offset)).thenReturn(listPokemonResponse);
 
-                // Chamando o método a ser testado
+                // Chamando o metodo a ser testado
                 response = listPokemonAdapter.getListPokemon(limit, offset);
             }
 
@@ -88,8 +87,7 @@ public class ListPokemonAdapterTest {
             public void beforeEach() {
                 offset = "0";
                 limit = "1";
-                errorText = "Error getting pokemon data"; // mensagem que vai aparecer quando a excessao for lancada
-
+                errorText = "[ListPokemonAdapter:getListPokemon] Error trying to get pokemon data"; // mensagem que vai aparecer quando a excessao for lancada
 
                 // falando que quando o gateway for lancado vai lancar a excessao com o texto definido
                 when(pokemonGatewayMock.getListPokemon(limit, offset)).thenThrow(new GetListPokemonException(errorText));
@@ -103,7 +101,7 @@ public class ListPokemonAdapterTest {
             }
 
             @Test
-            @DisplayName("Then throw an exepction")
+            @DisplayName("Then throw an exception")
             void getListPokemonExceptionThrowsAnException() {
                 assertEquals(errorText, thrownException.getMessage()); // verifica se o texto definido é o mesmo da excessao lancada
             }
