@@ -1,6 +1,6 @@
-package infrastructure.gateways;
+package org.example.infrastructure.gateways;
 
-import domain.ListPokemonResponse;
+import org.example.domain.ListPokemonResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;

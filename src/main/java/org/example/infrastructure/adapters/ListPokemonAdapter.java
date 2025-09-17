@@ -1,28 +1,27 @@
-package infrastructure.adapters;
+package org.example.infrastructure.adapters;
 
-import domain.ListPokemonResponse;
-import infrastructure.exception.GetListPokemonException;
-import infrastructure.gateways.PokemonGateway;
-import infrastructure.gateways.ListPokemonGateway;
+import org.example.domain.ListPokemonResponse;
+import org.example.infrastructure.exception.GetListPokemonException;
+import org.example.infrastructure.gateways.PokemonGateway;
+import org.example.infrastructure.gateways.ListPokemonGateway;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.logging.Logger;
 
-import static io.quarkus.arc.impl.UncaughtExceptions.LOGGER;
-
 @ApplicationScoped
 public class ListPokemonAdapter implements ListPokemonGateway {
 
     // guarda um objeto gateway
     private final PokemonGateway pokemonGateway;
-    private static final Logger LOGGER = Logger.getLogger(ListPokemonAdapter.class.getName());
+    private final Logger LOGGER;
 
     // instancia a interface gateway e coloca no atributo
     @Inject
-    public ListPokemonAdapter(@RestClient PokemonGateway pokemonGateway) {
+    public ListPokemonAdapter(@RestClient PokemonGateway pokemonGateway, Logger logger) {
         this.pokemonGateway = pokemonGateway;
+        this.LOGGER = logger;
     }
 
     // implementando o metodo da interface
@@ -30,9 +29,8 @@ public class ListPokemonAdapter implements ListPokemonGateway {
     public ListPokemonResponse getListPokemon(String limit, String offset) {
 
         try{
-            LOGGER.info("[ListPokemonAdapter:getListPokemon] Getting pokemon data from api");
             ListPokemonResponse response = pokemonGateway.getListPokemon(limit, offset);
-            LOGGER.info("[ListPokemonAdapter:getListPokemon] Data collected successfully"); // retorna o size da lista
+            LOGGER.info("[ListPokemonAdapter:getListPokemon] Data collected successfully");
             return response;
         }
         catch(Exception e){

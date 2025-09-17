@@ -1,10 +1,9 @@
 package org.example.infrastructure.adapters;
 
-import domain.ListPokemonResponse;
-import domain.PokemonResponse;
-import infrastructure.adapters.ListPokemonAdapter;
-import infrastructure.exception.GetListPokemonException;
-import infrastructure.gateways.PokemonGateway;
+import org.example.domain.ListPokemonResponse;
+import org.example.domain.PokemonResponse;
+import org.example.infrastructure.exception.GetListPokemonException;
+import org.example.infrastructure.gateways.PokemonGateway;
 import org.mockito.Mock;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -27,9 +27,13 @@ public class ListPokemonAdapterTest {
     @Mock
     PokemonGateway pokemonGatewayMock; // Mudando para o Gateway
 
+    @Mock
+    Logger loggerMock;
+
     @BeforeEach
     public void beforeEach() {
         reset(pokemonGatewayMock);
+        reset(loggerMock);
     }
 
     @Nested
@@ -70,6 +74,12 @@ public class ListPokemonAdapterTest {
             @Test
             @DisplayName("Then the function returns the list of pokemons")
             void getListPokemonReturnsTheListOfPokemons() {
+                verify(loggerMock).info("[ListPokemonAdapter:getListPokemon] Data collected successfully");
+            }
+
+            @Test
+            @DisplayName("Then the log is correct")
+            void getListPokemonLogIsCorrect() {
                 assertEquals(pokemonResponseList, response.getResults());
             }
         }
@@ -104,6 +114,12 @@ public class ListPokemonAdapterTest {
             @DisplayName("Then throw an exception")
             void getListPokemonExceptionThrowsAnException() {
                 assertEquals(errorText, thrownException.getMessage()); // verifica se o texto definido é o mesmo da excessao lancada
+            }
+
+            @Test
+            @DisplayName("Then the log is correct")
+            void getListPokemonLogIsCorrect() {
+                verify(loggerMock).severe("[ListPokemonAdapter:getListPokemon] Error trying to get pokemon data");
             }
         }
     }

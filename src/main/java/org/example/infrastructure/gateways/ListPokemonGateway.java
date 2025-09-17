@@ -1,6 +1,6 @@
-package infrastructure.gateways;
+package org.example.infrastructure.gateways;
 
-import domain.ListPokemonResponse;
+import org.example.domain.ListPokemonResponse;
 
 public interface ListPokemonGateway {
     ListPokemonResponse getListPokemon(String offset, String limit);

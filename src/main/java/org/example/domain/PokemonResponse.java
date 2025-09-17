@@ -1,4 +1,4 @@
-package domain;
+package org.example.domain;
 
 import jakarta.json.bind.annotation.JsonbProperty;
 
