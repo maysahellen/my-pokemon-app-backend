@@ -1,9 +1,9 @@
-package org.example.infrastructure.adapters;
+package br.com.vivo.infrastructure.adapters;
 
-import org.example.domain.ListPokemonResponse;
-import org.example.domain.PokemonResponse;
-import org.example.infrastructure.exception.GetListPokemonException;
-import org.example.infrastructure.gateways.PokemonGateway;
+import br.com.vivo.domain.ListPokemonResponse;
+import br.com.vivo.domain.PokemonResponse;
+import br.com.vivo.infrastructure.exception.GetListPokemonException;
+import br.com.vivo.infrastructure.gateways.PokemonGateway;
 import org.mockito.Mock;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,13 +72,13 @@ public class ListPokemonAdapterTest {
             }
 
             @Test
-            @DisplayName("Then the function returns the list of pokemons")
+            @DisplayName("Then the log is correct")
             void getListPokemonReturnsTheListOfPokemons() {
                 verify(loggerMock).info("[ListPokemonAdapter:getListPokemon] Data collected successfully");
             }
 
             @Test
-            @DisplayName("Then the log is correct")
+            @DisplayName("Then the function returns the list of pokemons")
             void getListPokemonLogIsCorrect() {
                 assertEquals(pokemonResponseList, response.getResults());
             }

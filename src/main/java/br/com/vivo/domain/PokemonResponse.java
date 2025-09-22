@@ -1,4 +1,4 @@
-package org.example.domain;
+package br.com.vivo.domain;
 
 import jakarta.json.bind.annotation.JsonbProperty;
 

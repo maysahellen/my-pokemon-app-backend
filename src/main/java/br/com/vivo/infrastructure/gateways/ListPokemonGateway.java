@@ -1,6 +1,6 @@
-package org.example.infrastructure.gateways;
+package br.com.vivo.infrastructure.gateways;
 
-import org.example.domain.ListPokemonResponse;
+import br.com.vivo.domain.ListPokemonResponse;
 
 public interface ListPokemonGateway {
     ListPokemonResponse getListPokemon(String offset, String limit);

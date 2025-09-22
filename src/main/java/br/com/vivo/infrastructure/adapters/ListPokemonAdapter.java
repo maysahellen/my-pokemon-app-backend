@@ -1,9 +1,9 @@
-package org.example.infrastructure.adapters;
+package br.com.vivo.infrastructure.adapters;
 
-import org.example.domain.ListPokemonResponse;
-import org.example.infrastructure.exception.GetListPokemonException;
-import org.example.infrastructure.gateways.PokemonGateway;
-import org.example.infrastructure.gateways.ListPokemonGateway;
+import br.com.vivo.domain.ListPokemonResponse;
+import br.com.vivo.infrastructure.exception.GetListPokemonException;
+import br.com.vivo.infrastructure.gateways.PokemonGateway;
+import br.com.vivo.infrastructure.gateways.ListPokemonGateway;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
