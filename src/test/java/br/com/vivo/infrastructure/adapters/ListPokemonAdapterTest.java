@@ -4,6 +4,7 @@ import br.com.vivo.domain.ListPokemonResponse;
 import br.com.vivo.domain.PokemonResponse;
 import br.com.vivo.infrastructure.exception.GetListPokemonException;
 import br.com.vivo.infrastructure.gateways.PokemonGateway;
+import nl.altindag.log.LogCaptor;
 import org.mockito.Mock;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -27,13 +27,12 @@ public class ListPokemonAdapterTest {
     @Mock
     PokemonGateway pokemonGatewayMock; // Mudando para o Gateway
 
-    @Mock
-    Logger loggerMock;
+    private LogCaptor logCaptor;
 
     @BeforeEach
     public void beforeEach() {
         reset(pokemonGatewayMock);
-        reset(loggerMock);
+        logCaptor = LogCaptor.forClass(ListPokemonAdapter.class);
     }
 
     @Nested
@@ -48,6 +47,7 @@ public class ListPokemonAdapterTest {
             String offset;
             ListPokemonResponse response;
             List<PokemonResponse> pokemonResponseList;
+            List<String> logs;
 
             @BeforeEach
             public void beforeEach() {
@@ -69,12 +69,14 @@ public class ListPokemonAdapterTest {
 
                 // Chamando o metodo a ser testado
                 response = listPokemonAdapter.getListPokemon(limit, offset);
+
+                logs = logCaptor.getInfoLogs();
             }
 
             @Test
             @DisplayName("Then the log is correct")
             void getListPokemonReturnsTheListOfPokemons() {
-                verify(loggerMock).info("[ListPokemonAdapter:getListPokemon] Data collected successfully");
+                Assertions.assertTrue(logs.contains("[ListPokemonAdapter:getListPokemon] Data collected successfully"));
             }
 
             @Test
@@ -92,6 +94,7 @@ public class ListPokemonAdapterTest {
             String offset;
             String errorText;
             GetListPokemonException thrownException;
+            List<String> logs;
 
             @BeforeEach
             public void beforeEach() {
@@ -108,6 +111,8 @@ public class ListPokemonAdapterTest {
                 catch(GetListPokemonException e){
                     thrownException = e; // coloca a excessao na variavel
                 }
+
+                logs = logCaptor.getErrorLogs();
             }
 
             @Test
@@ -119,7 +124,7 @@ public class ListPokemonAdapterTest {
             @Test
             @DisplayName("Then the log is correct")
             void getListPokemonLogIsCorrect() {
-                verify(loggerMock).severe("[ListPokemonAdapter:getListPokemon] Error trying to get pokemon data");
+                Assertions.assertTrue(logs.contains("[ListPokemonAdapter:getListPokemon] Error trying to get pokemon data"));
             }
         }
     }

@@ -7,21 +7,20 @@ import br.com.vivo.infrastructure.gateways.ListPokemonGateway;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class ListPokemonAdapter implements ListPokemonGateway {
 
     // guarda um objeto gateway
     private final PokemonGateway pokemonGateway;
-    private final Logger LOGGER;
+    private static final Logger log = LoggerFactory.getLogger(ListPokemonAdapter.class);
 
     // instancia a interface gateway e coloca no atributo
     @Inject
-    public ListPokemonAdapter(@RestClient PokemonGateway pokemonGateway, Logger logger) {
+    public ListPokemonAdapter(@RestClient PokemonGateway pokemonGateway) {
         this.pokemonGateway = pokemonGateway;
-        this.LOGGER = logger;
     }
 
     // implementando o metodo da interface
@@ -30,11 +29,11 @@ public class ListPokemonAdapter implements ListPokemonGateway {
 
         try{
             ListPokemonResponse response = pokemonGateway.getListPokemon(limit, offset);
-            LOGGER.info("[ListPokemonAdapter:getListPokemon] Data collected successfully");
+            log.info("[ListPokemonAdapter:getListPokemon] Data collected successfully");
             return response;
         }
         catch(Exception e){
-            LOGGER.severe("[ListPokemonAdapter:getListPokemon] Error trying to get pokemon data");
+            log.error("[ListPokemonAdapter:getListPokemon] Error trying to get pokemon data");
             throw new GetListPokemonException(e.getMessage());
         }
     }
