@@ -18,7 +18,7 @@ public class ListPokemon {
     public List<ListPokemonEntity> listPokemonResponseToListPokemonEntity (ListPokemonResponse pokemonResponse) {
 
         if (pokemonResponse == null) {
-            log.error("pokemonResponse is null, returning an empty list");
+            log.error("[ListPokemon:ListPokemonResponseToListPokemonEntity] pokemonResponse is null, returning an empty list");
             return new ArrayList<>();
         }
 
@@ -32,16 +32,26 @@ public class ListPokemon {
             id = getIdFromUrl(pokemon.getUrl());
             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + ".png";
 
-            ListPokemonEntity listPokemonEntity = new ListPokemonEntity(name, id, imageUrl);
+            ListPokemonEntity listPokemonEntity = new ListPokemonEntity(id, name, imageUrl);
 
             pokemonEntityList.add(listPokemonEntity);
         }
-        log.info("[ListPokemon:ListPokemonResponseToListPokemonEntity] id, name and image were extracted from the response successfully");
+        log.info("[ListPokemon:ListPokemonResponseToListPokemonEntity] id, name and image were extracted from response");
         return pokemonEntityList;
     }
 
     public String getIdFromUrl(String url) {
-        String id = url.substring(url.lastIndexOf("/") + 1);
+
+        String id;
+
+        // remove / do final
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
+        }
+
+        // pega a string do ultimo indice
+        String[] urlDivided = url.split("/");
+        id = urlDivided[urlDivided.length - 1];
         log.info("[ListPokemon:ListPokemonResponseToListPokemonEntity] id extracted: {}", id);
         return id;
     }
