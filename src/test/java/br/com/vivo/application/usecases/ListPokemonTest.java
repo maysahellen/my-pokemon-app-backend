@@ -1,12 +1,11 @@
 package br.com.vivo.application.usecases;
 
 import br.com.vivo.domain.ListPokemonResponse;
-import br.com.vivo.domain.PokemonResponse;
 import br.com.vivo.domain.entities.ListPokemonEntity;
+import br.com.vivo.templates.ListPokemonResponseTemplate;
 import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +19,7 @@ class ListPokemonTest {
 
     @BeforeEach
     public void setup() {
+        ListPokemonResponseTemplate.loadTemplates();
         listPokemon = new ListPokemon();
         logCaptor = LogCaptor.forClass(ListPokemon.class);
     }
@@ -32,35 +32,20 @@ class ListPokemonTest {
         @DisplayName("And the function is successful")
         class WhenListPokemonResponseToListPokemonEntityIsSuccessful {
 
-            ListPokemonResponse response;
-            List<PokemonResponse> results;
-            PokemonResponse pokemon;
-            List<ListPokemonEntity> entities;
+            ListPokemonResponse responses;
+            List<ListPokemonEntity> result;
 
             @BeforeEach
             public void setup() {
-
-                // PokemonResponse
-                pokemon = new PokemonResponse("charmander", "https://pokeapi.co/api/v2/pokemon/4/");
-
-                // lista de pokemonResponse
-                results = new ArrayList<>();
-                results.add(pokemon);
-
-                // ListPokemonResponse que é usado como parametro
-                response = new ListPokemonResponse();
-                response.setResults(results);
-
-                // chamada da funcao testada
-                entities = listPokemon.listPokemonResponseToListPokemonEntity(response);
-
+                responses = ListPokemonResponseTemplate.gimmeValid();
+                result = listPokemon.listPokemonResponseToListPokemonEntity(responses);
                 logs = logCaptor.getInfoLogs();
             }
 
             @Test
             @DisplayName("Then return the correct name")
             void thenReturnTheCorrectName() {
-                assertEquals("charmander", entities.get(0).getName());
+                assertEquals("charmander", result.get(0).getName());
             }
 
             @Test
@@ -72,13 +57,13 @@ class ListPokemonTest {
             @Test
             @DisplayName("The the id is correct")
             void getListPokemonIdIsCorrect() {
-                assertEquals("4", entities.get(0).getId());
+                assertEquals("4", result.get(0).getId());
             }
 
             @Test
             @DisplayName("Then the url image is correct")
             void getListPokemonUrlImageIsCorrect() {
-                assertEquals("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png", entities.get(0).getImage());
+                assertEquals("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png", result.get(0).getImage());
             }
         }
 
