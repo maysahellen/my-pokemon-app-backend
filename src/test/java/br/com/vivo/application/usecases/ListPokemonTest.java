@@ -45,7 +45,7 @@ class ListPokemonTest {
             @Test
             @DisplayName("Then return the correct name")
             void thenReturnTheCorrectName() {
-                assertEquals("charmander", result.get(0).getName());
+                assertEquals("bulbasaur", result.get(0).getName());
             }
 
             @Test
@@ -57,13 +57,13 @@ class ListPokemonTest {
             @Test
             @DisplayName("The the id is correct")
             void getListPokemonIdIsCorrect() {
-                assertEquals("4", result.get(0).getId());
+                assertEquals("1", result.get(0).getId());
             }
 
             @Test
             @DisplayName("Then the url image is correct")
             void getListPokemonUrlImageIsCorrect() {
-                assertEquals("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png", result.get(0).getImage());
+                assertEquals("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png", result.get(0).getImage());
             }
         }
 

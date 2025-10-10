@@ -32,11 +32,11 @@ public class ListPokemonCommand {
         try {
             ListPokemonResponse response = listPokemonAdapter.getListPokemon(limit, offset);
             List<ListPokemonEntity> pokemons = listPokemon.listPokemonResponseToListPokemonEntity(response);
-            log.info("[ListPokemonCommand:execute] response: {}", pokemons);
+            log.info("[ListPokemonCommand:execute] success transforming into entity");
             return pokemons;
         }
         catch (Exception e) {
-            log.error("[ListPokemonCommand:execute] error: {}", e.getMessage());
+            log.error("[ListPokemonCommand:execute] error trying to transform to entity");
             throw new GetListPokemonException(e.getMessage());
         }
     }

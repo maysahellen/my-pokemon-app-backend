@@ -4,10 +4,10 @@ import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 import br.com.six2six.fixturefactory.loader.TemplateLoader;
-import br.com.vivo.domain.ListPokemonResponse;
 import br.com.vivo.domain.PokemonResponse;
+import br.com.vivo.domain.entities.ListPokemonEntity;
 
-public class ListPokemonResponseTemplate implements TemplateLoader {
+public class ListPokemonEntityTemplate implements TemplateLoader {
 
     private static final String VALID = "valid";
 
@@ -19,19 +19,14 @@ public class ListPokemonResponseTemplate implements TemplateLoader {
     public void load() {
         Fixture.of(PokemonResponse.class).addTemplate("valid", new Rule() {
             {
+                add("id", "1");
                 add("name", "bulbasaur");
-                add("url", "https://pokeapi.co/api/v2/pokemon/1/");
-            }
-        });
-
-        Fixture.of(ListPokemonResponse.class).addTemplate(VALID, new Rule() {
-            {
-                add("results", has(1).of(PokemonResponse.class, "valid"));
+                add("image", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png");
             }
         });
     }
 
-    public static ListPokemonResponse gimmeValid() {
-        return Fixture.from(ListPokemonResponse.class).gimme(VALID);
+    public static ListPokemonEntity gimmeValid() {
+        return Fixture.from(ListPokemonEntity.class).gimme(VALID);
     }
 }

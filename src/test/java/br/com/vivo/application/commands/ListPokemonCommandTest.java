@@ -1,26 +1,48 @@
 package br.com.vivo.application.commands;
 
 import br.com.vivo.application.usecases.ListPokemon;
+import br.com.vivo.domain.ListPokemonResponse;
+import br.com.vivo.domain.entities.ListPokemonEntity;
+import br.com.vivo.infrastructure.adapters.ListPokemonAdapter;
+import br.com.vivo.infrastructure.exception.GetListPokemonException;
+import br.com.vivo.templates.ListPokemonEntityTemplate;
+import br.com.vivo.templates.ListPokemonResponseTemplate;
 import nl.altindag.log.LogCaptor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Given ListPokemonCommand")
 class ListPokemonCommandTest {
 
     @InjectMocks
     private ListPokemonCommand listPokemonCommand;
+
+    @Mock
+    ListPokemonAdapter listPokemonAdapter;
+
+    @Mock
+    ListPokemon listPokemon;
 
     private LogCaptor logCaptor;
     List<String> logs;
 
     @BeforeEach
     void setUp() {
-        logCaptor = LogCaptor.forClass(ListPokemon.class);
+        ListPokemonResponseTemplate.loadTemplates();
+        ListPokemonEntityTemplate.loadTemplates();
+        reset(listPokemonAdapter, listPokemon);
+        logCaptor = LogCaptor.forClass(ListPokemonCommand.class);
     }
 
     @Nested
@@ -31,16 +53,37 @@ class ListPokemonCommandTest {
         @DisplayName("And the call is successful")
         class AndTheCallIsSuccessful {
 
+            ListPokemonResponse response;
+            ListPokemonEntity entity;
+            List<ListPokemonEntity> listEntity;
+            List<ListPokemonEntity> resultCommand;
+
+            @BeforeEach
+            void setUp() {
+
+                response = ListPokemonResponseTemplate.gimmeValid();
+                when(listPokemonAdapter.getListPokemon("1", "0")).thenReturn(response);
+
+                entity = ListPokemonEntityTemplate.gimmeValid();
+                listEntity = new ArrayList<>();
+                listEntity.add(entity);
+                when(listPokemon.listPokemonResponseToListPokemonEntity(response)).thenReturn(listEntity);
+
+                resultCommand = listPokemonCommand.execute();
+
+                logs = logCaptor.getInfoLogs();
+            }
+
             @Test
             @DisplayName("Then returns a list of PokemonEntity")
             void thenReturnsListOfPokemonEntity() {
-
+                Assertions.assertEquals(resultCommand, listEntity);
             }
 
             @Test
             @DisplayName("Then the log is correct")
             void thenReturnsLog() {
-
+                Assertions.assertTrue(logs.contains("[ListPokemonCommand:execute] success transforming into entity"));
             }
         }
 
@@ -48,20 +91,37 @@ class ListPokemonCommandTest {
         @DisplayName("And the call is an error")
         class AndTheCallIsAnError {
 
-        }
+            String errorText;
+            GetListPokemonException thrownException;
+            List<String> logs;
 
-        @Test
-        @DisplayName("Then throw an exception")
-        void thenThrowAnException() {
+            @BeforeEach
+            void setUp() {
+                errorText = "[ListPokemonCommand:execute] error trying to transform to entity";
 
-        }
+                when(listPokemonCommand.execute()).thenThrow(new GetListPokemonException(errorText));
 
-        @Test
-        @DisplayName("Then the log is correct")
-        void thenReturnsLog() {
+                try{
+                    listPokemonCommand.execute();
+                }
+                catch(GetListPokemonException e){
+                    thrownException = e;
+                }
 
+                logs = logCaptor.getErrorLogs();
+            }
+
+            @Test
+            @DisplayName("Then throw an exception")
+            void thenThrowAnException() {
+                assertEquals(errorText, thrownException.getMessage());
+            }
+
+            @Test
+            @DisplayName("Then the log is correct")
+            void thenReturnsLog() {
+                Assertions.assertTrue(logs.contains("[ListPokemonCommand:execute] error trying to transform to entity"));
+            }
         }
     }
-
-
 }
