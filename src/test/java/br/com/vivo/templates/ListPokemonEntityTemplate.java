@@ -17,7 +17,7 @@ public class ListPokemonEntityTemplate implements TemplateLoader {
 
     @Override
     public void load() {
-        Fixture.of(PokemonResponse.class).addTemplate("valid", new Rule() {
+        Fixture.of(ListPokemonEntity.class).addTemplate("valid", new Rule() {
             {
                 add("id", "1");
                 add("name", "bulbasaur");

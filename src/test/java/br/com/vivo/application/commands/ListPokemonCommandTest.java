@@ -62,7 +62,7 @@ class ListPokemonCommandTest {
             void setUp() {
 
                 response = ListPokemonResponseTemplate.gimmeValid();
-                when(listPokemonAdapter.getListPokemon("1", "0")).thenReturn(response);
+                when(listPokemonAdapter.getListPokemon("30", "0")).thenReturn(response);
 
                 entity = ListPokemonEntityTemplate.gimmeValid();
                 listEntity = new ArrayList<>();
