@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,23 +53,22 @@ class ListPokemonCommandTest {
         class AndTheCallIsSuccessful {
 
             ListPokemonResponse response;
-            ListPokemonEntity entity;
             List<ListPokemonEntity> listEntity;
             List<ListPokemonEntity> resultCommand;
 
             @BeforeEach
             void setUp() {
 
+                // mock da response do adapter
                 response = ListPokemonResponseTemplate.gimmeValid();
                 when(listPokemonAdapter.getListPokemon("30", "0")).thenReturn(response);
 
-                entity = ListPokemonEntityTemplate.gimmeValid();
-                listEntity = new ArrayList<>();
-                listEntity.add(entity);
+                // mock da resposta da usecase
+                listEntity = ListPokemonEntityTemplate.gimmeValid();
                 when(listPokemon.listPokemonResponseToListPokemonEntity(response)).thenReturn(listEntity);
 
+                // chamada da função a ser testada
                 resultCommand = listPokemonCommand.execute();
-
                 logs = logCaptor.getInfoLogs();
             }
 

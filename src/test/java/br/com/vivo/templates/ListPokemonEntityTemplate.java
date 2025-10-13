@@ -4,8 +4,10 @@ import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 import br.com.six2six.fixturefactory.loader.TemplateLoader;
-import br.com.vivo.domain.PokemonResponse;
 import br.com.vivo.domain.entities.ListPokemonEntity;
+
+import java.util.Collections;
+import java.util.List;
 
 public class ListPokemonEntityTemplate implements TemplateLoader {
 
@@ -17,16 +19,24 @@ public class ListPokemonEntityTemplate implements TemplateLoader {
 
     @Override
     public void load() {
-        Fixture.of(ListPokemonEntity.class).addTemplate("valid", new Rule() {
+        Fixture.of(ListPokemonEntity.class).addTemplate(VALID, new Rule() {
             {
                 add("id", "1");
                 add("name", "bulbasaur");
                 add("image", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png");
             }
         });
+
+        Fixture.of(ListPokemonEntity.class).addTemplate("list", new Rule() {
+            {
+                add("entities", Collections.singletonList( // Collections.singletonList cria uma lista imutável com um item
+                        Fixture.from(ListPokemonEntity.class).gimme(VALID)
+                ));
+            }
+        });
     }
 
-    public static ListPokemonEntity gimmeValid() {
-        return Fixture.from(ListPokemonEntity.class).gimme(VALID);
+    public static List<ListPokemonEntity> gimmeValid() {
+        return Collections.singletonList(Fixture.from(ListPokemonEntity.class).gimme(VALID));
     }
 }
