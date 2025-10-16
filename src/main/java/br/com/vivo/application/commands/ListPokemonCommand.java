@@ -17,8 +17,8 @@ public class ListPokemonCommand {
 
     private final ListPokemon listPokemon;
     private final ListPokemonAdapter listPokemonAdapter;
-    public static final String limit = "30";
-    public static final String offset = "0";
+    public static final String LIMIT = "30";
+    public static final String OFFSET = "0";
     private static final Logger log = LoggerFactory.getLogger(ListPokemonCommand.class);
 
     @Inject
@@ -30,13 +30,13 @@ public class ListPokemonCommand {
     // metodo que faz o gateway usando o adapter e extrai a url e nome com a usecase
     public List<ListPokemonEntity> execute() {
         try {
-            ListPokemonResponse response = listPokemonAdapter.getListPokemon(limit, offset);
+            ListPokemonResponse response = listPokemonAdapter.getListPokemon(LIMIT, OFFSET);
             List<ListPokemonEntity> pokemons = listPokemon.listPokemonResponseToListPokemonEntity(response);
             log.info("[ListPokemonCommand:execute] success transforming into entity");
             return pokemons;
         }
         catch (Exception e) {
-            log.error("[ListPokemonCommand:execute] error trying to transform to entity");
+            log.error("[ListPokemonCommand:execute] error: {}", e.getMessage(), e);
             throw new GetListPokemonException(e.getMessage());
         }
     }
