@@ -40,7 +40,7 @@ public class ListPokemonAdapterTest {
     class getListPokemonAdapterTest {
 
         @Nested
-        @DisplayName("And the call of api is success")
+        @DisplayName("And the call of api is successful")
         class apiIsSucess {
 
             String limit;
